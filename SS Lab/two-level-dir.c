@@ -100,7 +100,7 @@ void main()
             printf("Directory %s not found!\n", d);
             jmps: break;
         case 5: // display
-            if (dCount == 0)
+            if (!dCount)
                 printf("No directories!\n");
             else {
                 for (i=0; i<dCount; i++) {
