@@ -45,8 +45,8 @@ void display(node *root) {
 }
 
 void main() {
-	char d[15], f[15];
-	node *root = NULL;
+    char d[15], f[15];
+    node *root = NULL;
     create(&root, 0, "root");
     printf("\n\n");
     display(root);
