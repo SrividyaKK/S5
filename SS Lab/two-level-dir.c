@@ -11,7 +11,7 @@ typedef struct {
 void main()
 {
     directory dir[10];
-    int i, ch, dCount=0, k, found;
+    int i, ch, dCount=0, k;
     char f[30], d[30];
     while (1)
     {
@@ -30,7 +30,7 @@ void main()
             printf("Enter the name of the directory: ");
             scanf("%s", d);
             for (i=0; i<dCount; i++) {
-                if (strcmp(d, dir[i].dName) == 0) {
+                if (!strcmp(d, dir[i].dName)) {
                     printf("Enter the name of the file: ");
                     scanf("%s", f);
                     for (k=0; k<dir[i].fCount; k++) {
@@ -52,17 +52,13 @@ void main()
         case 3: // delete file
             printf("Enter the name of the directory: ");
             scanf("%s", d);
-            for (i = 0; i < dCount; i++)
-            {
-                if (strcmp(d, dir[i].dName) == 0)
-                {
+            for (i = 0; i < dCount; i++) {
+                if (!strcmp(d, dir[i].dName)) {
                     if (dir[i].fCount) {
                         printf("Enter the name of the file: ");
                         scanf("%s", f);
-                        for (k = 0; k < dir[i].fCount; k++)
-                        {
-                            if (strcmp(f, dir[i].fName[k]) == 0)
-                            {
+                        for (k = 0; k < dir[i].fCount; k++) {
+                            if (!strcmp(f, dir[i].fName[k])) {
                                 printf("Deleted file: %s\n", f);
                                 dir[i].fCount--;
                                 strcpy(dir[i].fName[k], dir[i].fName[dir[i].fCount]);
@@ -73,27 +69,38 @@ void main()
                         goto jmp;
                     } else {
                         printf("Directory empty!\n");
+                        goto jmp;
                     }
                 }
             }
             printf("Directory %s not found!\n", d);
             jmp: break;
         case 4: // search
-            found = 0;
-            printf("Enter name of the file: ");
-            scanf("%s", f);
+            printf("Enter directory name: ");
+            scanf("%s", d);
             for (i=0; i<dCount; i++) {
-                for (k=0; k<dir[i].fCount; k++) {
-                    if (strcmp(f, dir[i].fName[k]) == 0) {
-                        printf("File %s found in directory: %s\n", f, dir[i].dName);
-                        found = 1;
+                if (!strcmp(d, dir[i].dName)) {
+                    if (dir[i].fCount) {
+                        printf("Enter name of the file: ");
+                        scanf("%s", f);
+                        for (k=0; k<dir[i].fCount; k++) {
+                            if (!strcmp(f, dir[i].fName[k])) {
+                                printf("File %s found in directory: %s\n", f, dir[i].dName);
+                                goto jmps;
+                            }
+                        }
+                        printf("File %s not found!\n", f);
+                        goto jmps;
+                    } else {
+                        printf("Directory empty!");
+                        goto jmps;
                     }
                 }
             }
-            if (!found) printf("File %s not found in any directory!\n", f);
-            break;
+            printf("Directory %s not found!\n", d);
+            jmps: break;
         case 5: // display
-            if (dCount == 0)
+            if (!dCount)
                 printf("No directories!\n");
             else {
                 for (i=0; i<dCount; i++) {
