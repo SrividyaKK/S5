@@ -6,7 +6,7 @@ typedef struct tree_element {
     int x, y, ftype, lx, rx, nc, level;
     struct tree_element *link[5];
 } node;
-typedef struct tree_element node;
+// typedef struct tree_element node;
 
 void main()
 {
@@ -27,7 +27,7 @@ create(node **root, int lev, char *dname, int lx, int rx, int x)
         printf("Enter name of dir/file(under %s) :", dname);
         fflush(stdin);
         gets((*root)->name);
-        printf("enter 1 for Dir/2 forfile :");
+        printf("enter 1 for Dir/2 for file :");
         scanf("%d", &(*root)->ftype);
         (*root)->level = lev;
         (*root)->y = 50 + lev * 50;
