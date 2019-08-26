@@ -7,16 +7,16 @@ struct node
 {
     char name[128];
     bool isDir;
-    struct node *p;
-    struct node *c[100];
-    int i;
+    struct node *p; // parent
+    struct node *c[100]; // children
+    int i; // no of children
 } * head, *curr;
 
 void ls()
 {
     if (curr->i == 0)
     {
-        printf("Empty directory\n");
+        printf("Directory Empty!\n");
         return;
     }
     for (int i = 0; i < curr->i; i++)
@@ -30,7 +30,7 @@ void ls()
 
 void touch(bool d)
 {
-    printf("Enter filename\n");
+    printf("Enter filename: ");
     char fname[128];
     scanf("%s", fname);
     struct node *temp = (struct node *)malloc(sizeof(struct node));
@@ -38,12 +38,12 @@ void touch(bool d)
     temp->isDir = d;
     temp->p = curr;
     curr->c[curr->i] = temp;
-    curr->i = (curr->i) + 1;
+    curr->i = (curr->i) + 1; // increment the no. of children
 }
 
-void cd()
+void cd() // relative path - from current directory
 {
-    printf("Enter directory name\n");
+    printf("Enter directory name: ");
     char dname[128];
     scanf("%s", dname);
     for (int i = 0; i < curr->i; i++)
@@ -65,11 +65,14 @@ void cdup()
         return;
     }
     curr = curr->p;
+    printf("Changed directory to: %s. \n", curr->name);
 }
 
 void rm(bool d)
 {
-    printf("Enter name of file or directory to delete\n");
+	char type[] = d === true ? "directory" : "file";
+    // printf("Enter name of file or directory to delete: ");
+    printf("Enter name of %s to delete: ", type);
     char name[128];
     scanf("%s", name);
     for (int i = 0; i < curr->i; i++)
@@ -101,7 +104,7 @@ void main()
     curr = head;
     while (true)
     {
-        printf("\n\nYou are in %s directory.\nEnter 1 to show everything in this directory\nEnter 2 to change directory\nEnter 3 to go to parent directory\nEnter 4 to add new file\nEnter 5 to delete file\nEnter 6 to create new directory\nEnter 7 to delete directory\nEnter 8 to exit\n", curr->name);
+        printf("\n\nYou are in %s directory. \n1. List directory. \n2. Change directory. \n3. Go to parent directory. \n4. Add new file. \n5. Delete file. \n6. Create new directory. \n7. Delete directory. \n8. Exit. \nENTER CHOICE: ", curr->name);
         scanf("%d", &in);
         switch (in)
         {
