@@ -3,8 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-struct node
-{
+struct node {
     char name[128];
     bool isDir;
     struct node *p; // parent
@@ -14,23 +13,24 @@ struct node
 
 void ls()
 {
-    if (curr->i == 0)
-    {
+    int i;
+    if (!curr->i) {
         printf("Directory Empty!\n");
         return;
     }
-    for (int i = 0; i < curr->i; i++)
-    {
+    for (i = 0; i < curr->i; i++) {
         if (curr->c[i]->isDir)
             printf("*%s*  ", curr->c[i]->name);
         else
             printf("%s  ", curr->c[i]->name);
     }
+    printf("\n");
 }
 
 void touch(bool d)
 {
-    printf("Enter filename: ");
+    char *type = d ? "directory" : "file";
+    printf("Enter %s name: ", type);
     char fname[128];
     scanf("%s", fname);
     struct node *temp = (struct node *)malloc(sizeof(struct node));
@@ -38,19 +38,19 @@ void touch(bool d)
     temp->isDir = d;
     temp->p = curr;
     curr->c[curr->i] = temp;
-    curr->i = (curr->i) + 1; // increment the no. of children
+    curr->i += 1; // increment the no. of children
 }
 
 void cd() // relative path - from current directory
 {
+    int i;
     printf("Enter directory name: ");
     char dname[128];
     scanf("%s", dname);
-    for (int i = 0; i < curr->i; i++)
-    {
-        if (!strcmp(curr->c[i]->name, dname) && curr->c[i]->isDir == true)
-        {
+    for (i = 0; i < curr->i; i++) {
+        if (!strcmp(curr->c[i]->name, dname) && curr->c[i]->isDir) {
             curr = curr->c[i];
+            printf("Changed directory to: %s. \n", curr->name);
             return;
         }
     }
@@ -59,8 +59,7 @@ void cd() // relative path - from current directory
 
 void cdup()
 {
-    if (curr->p == NULL)
-    {
+    if (curr->p == NULL) {
         printf("You are at the root directory\n");
         return;
     }
@@ -70,22 +69,20 @@ void cdup()
 
 void rm(bool d)
 {
-	char type[] = d === true ? "directory" : "file";
-    // printf("Enter name of file or directory to delete: ");
+	char *type = d ? "directory" : "file";
     printf("Enter name of %s to delete: ", type);
     char name[128];
     scanf("%s", name);
-    for (int i = 0; i < curr->i; i++)
-    {
-        if (!strcmp(curr->c[i]->name, name) && ((d && curr->c[i]->isDir == true) || (!d && curr->c[i]->isDir == false)))
+    int i;
+    for (i = 0; i < curr->i; i++) {
+        if (!strcmp(curr->c[i]->name, name) && ((d && curr->c[i]->isDir) || (!d && curr->c[i]->isDir == false))) 
         {
             int t = i;
-            while (t < (curr->i) - 1)
-            {
+            while (t < (curr->i) - 1) {
                 curr->c[t] = curr->c[t + 1];
                 t++;
             }
-            curr->i = (curr->i) - 1;
+            curr->i -= 1;
             printf("Successfully deleted.\n");
             return;
         }
@@ -102,9 +99,8 @@ void main()
     head->p = NULL;
     head->i = 0;
     curr = head;
-    while (true)
-    {
-        printf("\n\nYou are in %s directory. \n1. List directory. \n2. Change directory. \n3. Go to parent directory. \n4. Add new file. \n5. Delete file. \n6. Create new directory. \n7. Delete directory. \n8. Exit. \nENTER CHOICE: ", curr->name);
+    while (true) {
+        printf("\n1. List directory. \n2. Change directory. \n3. Go to parent directory. \n4. Add new file. \n5. Delete file. \n6. Create new directory. \n7. Delete directory. \n8. Print working directory. \n9. Exit. \nENTER CHOICE: ", curr->name);
         scanf("%d", &in);
         switch (in)
         {
@@ -128,6 +124,9 @@ void main()
             break;
         case 7:
             rm(true);
+            break;
+        case 8: 
+            printf("%s\n", curr->name);
             break;
         default:
             exit(0);
