@@ -18,7 +18,7 @@ void fcfs() {
 
 void sortRequests() {
 	bool found = false;
-	int s;
+	int i, j, temp, s;
 	for (i=0; i<n-1; i++) {
 		s=i;
 		for (j=i+1; j<n; j++) {
@@ -44,6 +44,13 @@ void scan() {
 		movts += abs(req[i]-cur);
 		cur = req[i];
 	}
+	for (i=p-1; i>=0; i--) {
+		if (i != 0) printf("%d --> ", req[i]);
+		else printf("%d\n", req[i]);
+		movts += abs(req[i]-cur);
+		cur = req[i];
+	}
+	printf("No. of cylinder movements: %d\n", movts);
 }
 
 void cScan() {
