@@ -44,10 +44,30 @@ void scan() {
 		movts += abs(req[i]-cur);
 		cur = req[i];
 	}
+	for (i=p-1; i>=0; i--) {
+		if (i) printf("%d --> ", req[i]);
+		else printf("%d\n", req[i]);
+		movts += abs(req[i]-cur);
+		cur = req[i];
+	}
+	printf("No. of cylinder movements: %d\n", movts);
 }
 
 void cScan() {
 	int movts=0, i, cur=head;
+	printf("Head Movements: \n");
+	for (i=p; i<n; i++) {
+		printf("%d --> ", req[i]);
+		movts += abs(req[i]-cur);
+		cur = req[i];
+	}
+	for (i=0; i<p; i--) {
+		if (i != p-1 ) printf("%d --> ", req[i]);
+		else printf("%d\n", req[i]);
+		movts += abs(req[i]-cur);
+		cur = req[i];
+	}
+	printf("No. of cylinder movements: %d\n", movts);
 }
 
 void main()

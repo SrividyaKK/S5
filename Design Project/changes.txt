@@ -1,0 +1,5 @@
+Changes: 
+1. App based
+2. Fingerprint authentication --- fingerprint is hashed; face recognition using webcam for desktop/laptop users. 
+3. Notifies about new emails in Inbox. 
+4. Uses TTS, NLU, ASR. 
