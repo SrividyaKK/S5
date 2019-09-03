@@ -21,11 +21,9 @@ void sortRequests() {
 	int i, j, temp, s;
 	for (i=0; i<n-1; i++) {
 		s=i;
-		for (j=i+1; j<n; j++) {
-			if (req[j] < req[s]) {
+		for (j=i+1; j<n; j++)
+			if (req[j] < req[s])
 				s=j;
-			}
-		}
 		temp = req[i];
 		req[i] = req[s];
 		req[s] = temp;
@@ -43,6 +41,10 @@ void scan() {
 		printf("%d --> ", req[i]);
 		movts += abs(req[i]-cur);
 		cur = req[i];
+		if (i==n-1) {
+			movts += abs(max-cur); // add the movt to the end of the disk
+			cur = max; // move to the end of the disk
+		}
 	}
 	for (i=p-1; i>=0; i--) {
 		if (i) printf("%d --> ", req[i]);
@@ -61,6 +63,10 @@ void cScan() {
 		else printf("%d\n", req[j]);
 		movts += abs(req[j]-cur);
 		cur = req[j];
+		if (j==n-1) {
+			movts += abs(max-cur) + max; // add the movt to the end of the disk and from the end of the disk to the beginning
+			cur = 0; // move to the end of the disk
+		}
 		j=(j+1)%n;
 	}
 	printf("No. of cylinder movements: %d\n", movts);
