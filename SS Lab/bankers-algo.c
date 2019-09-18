@@ -37,6 +37,17 @@ void main() {
         for (j = 0; j < m; j++)
             need[i][j] = max[i][j] - alloc[i][j];
 
+    printf("\nNeed matrix: \n");
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < m; j++)
+        {   
+            printf("%d ", need[i][j]);
+        }
+        printf("\n");
+    }
+
+
     while (count < n) {
         safe = false;
         for (i=0; i<n; i++) {

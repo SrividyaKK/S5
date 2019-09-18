@@ -16,12 +16,10 @@ void signal(int *s)
 
 void producer() {
 	int x;
-	// wait (&mutex);
-	// signal(&full);
-	// wait(&empty);
-	// produce an item
+	wait (&mutex);
+	signal(&full);
 	wait(&empty);
-	wait(&mutex);
+	// produce an item
 	printf("Enter the item to be produced: ");
 	scanf("%d", &x);
 
@@ -31,14 +29,13 @@ void producer() {
 	buffer[r] = x;
 	printf("Produced item: %d\n\n", x);
 
-	signal(&full);
 	signal(&mutex);
 }
 
 void consumer() {
-	wait(&full);
 	wait(&mutex);
-	// signal(&empty);
+	wait(&full);
+	signal(&empty);
 
 	//remove an item from buffer
 	int x = buffer[f];
@@ -46,7 +43,6 @@ void consumer() {
 	else f = (f+1)%n;
 
 	signal(&mutex);
-	signal(&empty);
 
 	// consume the item
 	printf("Consumed item: %d\n\n", x);
@@ -60,7 +56,7 @@ void main()
 	empty=n;
 	while (true) 
 	{
-		printf("1. Producer. \n2. Consumer. \n3. Exit. \nENTER CHOICE: ");
+		printf("1. Producer. \n2. Consumer. \n3.Exit. \nENTER CHOICE: ");
 		scanf("%d", &ch);
 		switch(ch) {
 			case 1: 
