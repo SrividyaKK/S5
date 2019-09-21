@@ -35,26 +35,28 @@ int main(){
 	transitionMap = (int**)malloc(64*sizeof(int*));
 	for (int i = 0; i < 64; i++){
 		transitionMap[i] = (int*) malloc(26*sizeof(int));
-		for (int j = 0; j < 26; j++){
+		for (int j = 0; j < 26; j++) {
 			transitionMap[i][j] = -1;
 		}
 	}
 
 	partitionTransitionMap = (int**)malloc(64*sizeof(int*));
-	for (int i = 0; i < 64; i++){
+	for (int i = 0; i < 64; i++) {
 		partitionTransitionMap[i] = (int*) malloc(26*sizeof(int));
-		for (int j = 0; j < 26; j++){
+		for (int j = 0; j < 26; j++) {
 			partitionTransitionMap[i][j] = -1;
 		}
 	}
 
 	// read start state
 	char buff[125];
+	printf("Enter start state: ");
 	fgets(buff, sizeof(buff), stdin);
 	char *p = strtok(buff, " ");
 	startState = atoi(p);
 
 	// read final states
+	printf("Enter the final states: ");
 	fgets(buff, sizeof(buff), stdin);
 	p = strtok(buff, " ");
 	while (p != NULL)
