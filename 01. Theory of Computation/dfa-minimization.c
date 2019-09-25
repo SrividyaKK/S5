@@ -17,15 +17,12 @@ void dfs(int v)
 	
 	// Try exploring all paths..
 	for(int i=0; i<26; i++)
-		if((transitionMap[v][i] != -1) && ((reachable & (1 << transitionMap[v][i])) == 0))
-		{
+		if((transitionMap[v][i] != -1) && ((reachable & (1 << transitionMap[v][i])) == 0)) {
 			dfs(transitionMap[v][i]);
 		}
 }
 
-
-int main(){
-
+int main() {
 	// We start off with no states
 	finalStates = 0;
 	allStates = 0;
@@ -33,7 +30,7 @@ int main(){
 	// Initialize our transition maps. We set transition[i][j] to be -1 in order to indicate that state/partition i does not transition when given symbol j
 
 	transitionMap = (int**)malloc(64*sizeof(int*));
-	for (int i = 0; i < 64; i++){
+	for (int i = 0; i < 64; i++) {
 		transitionMap[i] = (int*) malloc(26*sizeof(int));
 		for (int j = 0; j < 26; j++) {
 			transitionMap[i][j] = -1;
@@ -66,8 +63,8 @@ int main(){
 		p = strtok(NULL, " ");
 	}
 
-
 	// read transitions
+	printf("Enter the transitions: ");
 	int from;
 	char symbol;
 	int to;
@@ -89,7 +86,7 @@ int main(){
 
 	// initialize array of partitions to include empty bitsets
 	P =  (long int*) malloc(64*sizeof(long int));
-	for (int i = 0; i < 64 ; i++){
+	for (int i = 0; i < 64 ; i++) {
 		P[i] = 0; // no partition exists
 	}
 
@@ -101,56 +98,50 @@ int main(){
 	int nextPartitionIndex = 2; // Store how many partitions have been added already
 
 	// There will be at most 64 partitions. At each iteration, we operate on a partition and add at most 1 more partition 
-	for (int i = 0; i < 64; i++){
-
+	for (int i = 0; i < 64; i++) {
 		// A bitset for a new partition. This partition will include all states that are distinct from the state corresponding to the leftmost bit in P[i]
 		long int newPartition = 0;
 
 		// Done partitioning
-		if (P[i] == 0){
+		if (P[i] == 0) {
 			break;
 		}
 
 		// Try to find leftmost bit in the bitset. This loop will only run to its entirety once when that bit is found
 		for (int j = 63; j >=  0; j--) {
-
 			// Potential leftmost bit. If found, this bit will remain in the bit set.
 			long int staticState = (long int) 1 << j;
 
 			// Check if this state is in the current bitset
-			if ((P[i] & (staticState)) != 0){
+			if ((P[i] & (staticState)) != 0) {
 
 				// The lestmost bit state will be associated with this partition. Therefore, we must copy over the transitions for this state to the transitions for
 				// the corresponding partition
 				partitionTransitionMap[i] = transitionMap[j];
 
-
 				// Check for states that should be removed from this partition. All states will be bits right of the staticState bit
-				for (int k = j - 1; k >= 0; k -- ){
-
+				for (int k = j - 1; k >= 0; k -- ) {
 					// Potential state to remove
 					long int otherState = (long int) 1 << k;
 
 					// Check if this state is in the current bitset
-					if ((P[i] & (otherState)) != 0){
-
+					if ((P[i] & (otherState)) != 0) {
 						// Iterate across the entire alphabet and check if staticState and otherState can transition to different partitions.
-						for (int l  = 0; l < 26; l++){
-
+						for (int l  = 0; l < 26; l++) {
 							int staticNext = -1; // next partition for static
 							int otherNext = -1; // next partition for other
 
-							for (int m = 0; m < nextPartitionIndex; m++){
-								if ((P[m] & (1 << transitionMap[j][l])) != 0){
+							for (int m = 0; m < nextPartitionIndex; m++) {
+								if ((P[m] & (1 << transitionMap[j][l])) != 0) {
 									staticNext = m;	//found static next
 								}
-								if ((P[m] & (1 << transitionMap[k][l])) != 0){
+								if ((P[m] & (1 << transitionMap[k][l])) != 0) {
 									otherNext = m; // found other next
 								}
 							}
 													
 							// If partitions differ, remove the other state and add it to the new partition. Then break, since we are done with this partition	
-							if (transitionMap[j][l] != transitionMap[k][l] && (staticNext != otherNext)){
+							if (transitionMap[j][l] != transitionMap[k][l] && (staticNext != otherNext)) {
 								P[i] &= ~(1 << k);
 								newPartition |= (1 << k);
 								break;
@@ -163,40 +154,36 @@ int main(){
 		}
 
 		// New partition exists. Add it to P and increment nextPartitionIndex
-		if (newPartition != 0){
+		if (newPartition != 0) {
 			P[nextPartitionIndex] = newPartition;
 			nextPartitionIndex++;
 		}
 	}
 
-
 	// find and print start partition
 	int startPartition = 0;
-	for (int i = 0; i < nextPartitionIndex; i ++){
-		if ((P[i] & (1 << startState)) != 0 ){
+	for (int i = 0; i < nextPartitionIndex; i ++) {
+		if ((P[i] & (1 << startState)) != 0 ) {
 			startPartition = i;
 			break;
 		}
 	}
-
 	printf("%d \n", startPartition);
 
-
 	// find and print final partitions
-	for (int i = 0; i < nextPartitionIndex; i++){
-		if ((P[i] & finalStates) != 0){
+	for (int i = 0; i < nextPartitionIndex; i++) {
+		if ((P[i] & finalStates) != 0) {
 			printf("%d ", i);
 		}
 	}
 	printf("\n");
 
-
 	// find and print all transitions
-	for (int i = 0; i < nextPartitionIndex; i++){
+	for (int i = 0; i < nextPartitionIndex; i++) {
 		for (int j = 0; j < 26; j++) {
-			if (partitionTransitionMap[i][j] != -1){
-				for (int k = 0; k < nextPartitionIndex; k++){
-					if ((P[k] & (1 << partitionTransitionMap[i][j])) != 0){
+			if (partitionTransitionMap[i][j] != -1) {
+				for (int k = 0; k < nextPartitionIndex; k++) {
+					if ((P[k] & (1 << partitionTransitionMap[i][j])) != 0) {
 						printf("%d %c %d\n", i, j + 'a', k);
 					}
 				}
@@ -205,5 +192,4 @@ int main(){
 	}
 
 	return 0;
-
 }
