@@ -13,11 +13,11 @@ long int *P; // array of partitions. Each partition is a bitset of states
 
 void dfs(int v)
 {
-	reachable |= (1 << v);
+	reachable |= (1 << v); // v is a reachable state
 	
 	// Try exploring all paths..
-	for(int i=0; i<26; i++)
-		if((transitionMap[v][i] != -1) && ((reachable & (1 << transitionMap[v][i])) == 0)) {
+	for (int i=0; i<26; i++)
+		if ((transitionMap[v][i] != -1) && ((reachable & (1 << transitionMap[v][i])) == 0)) { // transition is there from v for input symbol i, and the state transitionMap[v][i] hasn't been visited yet. 
 			dfs(transitionMap[v][i]);
 		}
 }
@@ -28,7 +28,6 @@ int main() {
 	allStates = 0;
 
 	// Initialize our transition maps. We set transition[i][j] to be -1 in order to indicate that state/partition i does not transition when given symbol j
-
 	transitionMap = (int**)malloc(64*sizeof(int*));
 	for (int i = 0; i < 64; i++) {
 		transitionMap[i] = (int*) malloc(26*sizeof(int));
