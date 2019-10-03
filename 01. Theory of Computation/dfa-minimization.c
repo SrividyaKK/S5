@@ -113,13 +113,11 @@ int main() {
 
 			// Check if this state is in the current bitset
 			if ((P[i] & (staticState)) != 0) {
-
-				// The lestmost bit state will be associated with this partition. Therefore, we must copy over the transitions for this state to the transitions for
-				// the corresponding partition
+				// The lestmost bit state will be associated with this partition. Therefore, we must copy over the transitions for this state to the transitions for the corresponding partition
 				partitionTransitionMap[i] = transitionMap[j];
 
 				// Check for states that should be removed from this partition. All states will be bits right of the staticState bit
-				for (int k = j - 1; k >= 0; k -- ) {
+				for (int k = j - 1; k >= 0; k --) {
 					// Potential state to remove
 					long int otherState = (long int) 1 << k;
 
