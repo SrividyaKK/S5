@@ -117,7 +117,7 @@ int main() {
 				partitionTransitionMap[i] = transitionMap[j];
 
 				// Check for states that should be removed from this partition. All states will be bits right of the staticState bit
-				for (int k = j - 1; k >= 0; k --) {
+				for (int k = j - 1; k >= 0; k--) {
 					// Potential state to remove
 					long int otherState = (long int) 1 << k;
 
