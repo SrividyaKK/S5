@@ -1,0 +1,41 @@
+PASS 2:
+{
+	read first input line {from intermediate file}
+	if(OPCODE = 'START')
+		write listing line
+		read next input line
+	write HEADER record to object pgm //-------HEADER------
+	initialize first TEXT record
+
+	while(OPCODE != 'END')
+		if(not a comment line)
+			//--------OPTAB--------
+			search OPTAB for OPCODE
+			if(OPCODE found)
+				if(OPERAND exists)
+					search SYMTAB for OPERAND
+					if(operand found)
+						operand_address <- SYMBOL_VALUE
+					else
+						operand_address <- 0
+						error_flag <- 1
+				else //---eg: RSUB ------
+					operand_address <- 0
+				assemble object code instruction
+
+			else if(OPCODE = 'BYTE' or 'WORD')
+				convert constant to object code
+
+			if object code will not fit into current TEXT record
+				object pgm <- TEXT //----------TEXT------
+				initialize new TEXT record
+				
+			TEXT record <- object code
+
+		write listing line
+		read next input line
+
+	write last TEXT record -> object pgm //-------TEXT-----
+	write END record -> object pgm //------END------
+	write last listing line
+}
