@@ -1,0 +1,42 @@
+{
+	read the first input line
+	if(OPCODE = 'START')
+		save starting_address <- #[OPERAND]
+		LOCCTR <- starting_address
+		write line to intermediate file
+		read next input line
+	else
+		LOCCTR <- 0
+
+	while(OPCODE != 'END')
+		if(not a comment line)
+			//-------SYMTAB-------
+			if(LABEL exists)
+				search SYMBTAB for LABEL
+				if(found)
+					error = 1
+				else
+					insert{LABEL, LOCCTR} into SYMTAB
+			//-------OPTAB--------
+			search OPTAB for OPCODE
+			if(found)
+				LOCCTR <- LOCCTR + 3
+			//assembly directives
+			else if(OPCODE = 'WORD')
+				LOCCTR <- LOCCTR + 3
+			else if(OPCODE = 'RESW')
+				LOCCTR <- LOCCTR + 3*#[OPERAND]
+			else if(OPCODE = 'RESB')
+				LOCCTR <- LOCCTR + #[OPERAND]
+			else if(OPCODE = 'BYTE')
+				find len of operand in bytes
+				LOCCTR <- LOCCTR + len
+			else
+				error = 1
+
+		write line to intermediate file
+		read next input line
+
+	write last line to intermediate file
+	pgm_len = LOCCTR - starting_address
+}
